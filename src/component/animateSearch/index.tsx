@@ -4,10 +4,13 @@ import { searchData } from '../../data/searchDemoData.ts'
 import { FiSearch, FiSettings, FiPaperclip, FiUser, FiMessageCircle, FiList } from 'react-icons/fi';
 import Loader from '../loader/index.tsx';
 import Shimmer from '../shimmer/index.tsx';
+import { LuLink } from "react-icons/lu";
+import { VscLinkExternal } from "react-icons/vsc";
 import Tabs from './tabs.tsx';
 
 export default function AnimateSearch() {
   const [isLoading, setIsLoading] = useState(false);
+  const [copied, setCopied] = useState<null | Number>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
@@ -119,32 +122,64 @@ export default function AnimateSearch() {
         animate={{ opacity: 1, y: 0 }}
         className=""
       >
-        {(activeTab === 'all' || activeTab === 'people') && filteredPeople.map((person, index) => (
-          <motion.div
-            key={person.id}
-            initial={{ opacity: 0, y: -5 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
+        {(activeTab === 'all' || activeTab === 'people') &&
+          filteredPeople.map((person, index) => {
 
-            className='hover:bg-[#f7f7f7]'
-          >
-            <div className="flex items-center space-x-3 py-2 cursor-pointer group border-b border-gray-200 mx-6">
-              <div className="relative">
-                <img
-                  src={person.avatar}
-                  alt={person.name}
-                  className="w-10 h-10 rounded-lg object-cover"
-                />
-                <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${person.isActive ? 'bg-[#f9c200]' : 'bg-[#da1413]'
-                  }`} />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-medium text-gray-900">{highlightText(person.name, searchQuery)}</h3>
-                <p className="text-sm text-gray-500">{person.status}</p>
-              </div>
-            </div>
-          </motion.div>
-        ))}
+            return (
+              <motion.div
+                key={person.id}
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="hover:bg-[#f7f7f7] group"
+              >
+                <div className="flex items-center space-x-3 py-2 cursor-pointer border-b border-gray-200 mx-6">
+                  <div className="relative">
+                    <img
+                      src={person.avatar}
+                      alt={person.name}
+                      className="w-10 h-10 rounded-lg object-cover"
+                    />
+                    <div
+                      className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${person.isActive ? "bg-[#f9c200]" : "bg-[#da1413]"
+                        }`}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-medium text-gray-900">
+                      {highlightText(person.name, searchQuery)}
+                    </h3>
+                    <p className="text-sm text-gray-500">{person.status}</p>
+                  </div>
+
+                  <div className="flex items-center">
+                    {/* {copied === person.id && (
+                      <span className="text-xs text-white bg-black px-2 py-1 mt-1 rounded-md relative -top-7 left-10">Copied</span>
+                    )} */}
+                    <div
+                      className="hidden group-hover:block hover:border border-[#9f9f9f] hover:rounded-full p-1 hover:bg-[#d1d1d4] hover:[&>*]:text-gray-600 cursor-pointer"
+                      onClick={() => {
+                        navigator.clipboard.writeText(person.name);
+                        setCopied(person.id);
+                        setTimeout(() => setCopied(null), 200); // hide after 1.5s
+                      }}
+                    >
+                      <LuLink className="text-[#8b8b8b]" />
+                    </div>
+                  </div>
+                  <a
+                    href='https://dribbble.com/shots/17399694-Search-Results-Animation'
+                    target='blank'
+                    className='hidden group-hover:flex gap-2 items-center !text-[#8b8b8b] ml-auto text-[12px] hover:[&>*]:text-gray-600'>
+                    <VscLinkExternal size={15} className='font-bold' />
+                    <span className='text-xs'>New Tab</span>
+                  </a>
+                </div>
+              </motion.div>
+            );
+          })}
+
+
 
         {(activeTab === 'all' || activeTab === 'files') && filteredFiles.map((file, index) => (
           <motion.div
@@ -152,7 +187,7 @@ export default function AnimateSearch() {
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: (filteredPeople.length + index) * 0.1 }}
-            className='hover:bg-[#f7f7f7]'
+            className='hover:bg-[#f7f7f7] group'
           >
             <div className="flex items-center space-x-3 py-2 cursor-pointer group border-b border-gray-200 mx-6">
               <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
@@ -162,6 +197,28 @@ export default function AnimateSearch() {
                 <h3 className="font-medium text-gray-900">{highlightText(file.name, searchQuery)}</h3>
                 <p className="text-sm text-gray-500">in {file.location} • {file.lastEdited}</p>
               </div>
+              <div className="flex items-center">
+                {/* {copied === person.id && (
+                      <span className="text-xs text-white bg-black px-2 py-1 mt-1 rounded-md relative -top-7 left-10">Copied</span>
+                    )} */}
+                <div
+                  className="hidden group-hover:block hover:border border-[#9f9f9f] hover:rounded-full p-1 hover:bg-[#d1d1d4] hover:[&>*]:text-gray-600 cursor-pointer"
+                  onClick={() => {
+                    navigator.clipboard.writeText(file.name);
+                    setCopied(file.id);
+                    setTimeout(() => setCopied(null), 200); // hide after 1.5s
+                  }}
+                >
+                  <LuLink className="text-[#8b8b8b]" />
+                </div>
+              </div>
+              <a
+                href='https://dribbble.com/shots/17399694-Search-Results-Animation'
+                target='blank'
+                className='hidden group-hover:flex gap-2 items-center !text-[#8b8b8b] ml-auto text-[12px] hover:[&>*]:text-gray-600'>
+                <VscLinkExternal size={15} className='font-bold' />
+                <span className='text-xs'>New Tab</span>
+              </a>
             </div>
           </motion.div>
         ))}
