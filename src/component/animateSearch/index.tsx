@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { searchData } from '../../data/searchDemoData.ts'
 import { FiSearch, FiSettings, FiPaperclip, FiUser, FiMessageCircle, FiList } from 'react-icons/fi';
@@ -11,6 +11,7 @@ export default function AnimateSearch() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [filters, setFilters] = useState({
     files: true,
     people: true,
@@ -25,6 +26,16 @@ export default function AnimateSearch() {
 
     return () => clearTimeout(timer);
   }, [searchQuery]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowFilters(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   const filteredPeople = searchData.people.filter(person =>
     person.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -231,7 +242,7 @@ export default function AnimateSearch() {
                   filters={filters}
                   counts={counts}
                 />
-                <div className="relative">
+                <div className="relative" ref={dropdownRef}>
                   <div
                     onClick={() => setShowFilters(!showFilters)}
                     className="transition-colors text-gray-400 hover:text-gray-600 flex items-start -mt-2"

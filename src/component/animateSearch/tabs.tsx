@@ -56,7 +56,7 @@ export default function Tabs({ activeTab, setActiveTab, filters, counts }: Props
                             {tabs.find((tab) => tab.id === activeTab)?.count}
                         </span>
                     </div>
-                    <FiChevronUp className={`transition-transform duration-200 text-black ${dropdownOpen ? 'rotate-180' : 'rotate-0'}`} />
+                    <FiChevronUp className={`transition-transform duration-200 text-black ${dropdownOpen ? 'rotate-0' : 'rotate-180'}`} />
                 </button>
 
                 <AnimatePresence>
@@ -91,7 +91,7 @@ export default function Tabs({ activeTab, setActiveTab, filters, counts }: Props
 
     // Desktop tabs view
     return (
-        <div className="flex space-x-2 relative ">
+        <div className="flex space-x-2 -mb-1">
             {tabs.map((tab) => (
                 <div
                     key={tab.id}
