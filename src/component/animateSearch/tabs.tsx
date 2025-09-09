@@ -102,7 +102,23 @@ export default function Tabs({ activeTab, setActiveTab, filters, counts }: Props
                     <div className="flex items-center space-x-1 px-1 mb-1">
                         {tab.icon}
                         <span className={`${activeTab === tab.id ? "font-semibold" : ""}`}>{tab.label}</span>
-                        <span className="px-2 py-[1.5px] text-[11px] bg-[#f2f2f2] rounded-md text-[#828282]">{tab.count}</span>
+                        <div className="relative overflow-hidden px-2 py-[1.5px] bg-[#f2f2f2] rounded-md">
+                            <motion.span
+                                key={tab.count}
+                                initial={{ y: -20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: 20, opacity: 0 }}
+                                transition={{
+                                    type: "spring",
+                                    stiffness: 400,
+                                    damping: 25,
+                                    duration: 1
+                                }}
+                                className="block text-[11px] text-[#828282]"
+                            >
+                                {tab.count}
+                            </motion.span>
+                        </div>
                     </div>
 
                     {activeTab === tab.id && (
