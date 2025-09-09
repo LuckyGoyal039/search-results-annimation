@@ -7,6 +7,7 @@ import Shimmer from '../shimmer/index.tsx';
 import { LuLink } from "react-icons/lu";
 import { VscLinkExternal } from "react-icons/vsc";
 import Tabs from './tabs.tsx';
+import { TiTick } from 'react-icons/ti';
 
 export default function AnimateSearch() {
   const [isLoading, setIsLoading] = useState(false);
@@ -152,28 +153,30 @@ export default function AnimateSearch() {
                     <p className="text-sm text-gray-500">{person.status}</p>
                   </div>
 
-                  <div className="flex items-center">
-                    {/* {copied === person.id && (
-                      <span className="text-xs text-white bg-black px-2 py-1 mt-1 rounded-md relative -top-7 left-10">Copied</span>
-                    )} */}
+                  <div className="hidden group-hover:flex items-center">
+                    {copied === person.id && (<div className='flex items-center gap-1 text-[12px] text-white bg-black px-2 py-1 mt-1 rounded-md relative -top-[29px] left-12'>
+                      <TiTick className='text-white' />
+                      <span >Copied</span>
+                    </div>
+                    )}
                     <div
-                      className="hidden group-hover:block hover:border border-[#9f9f9f] hover:rounded-full p-1 hover:bg-[#d1d1d4] hover:[&>*]:text-gray-600 cursor-pointer"
+                      className="hidden group-hover:block hover:border border-[#9f9f9f] hover:rounded-full p-1 hover:bg-[#d1d1d4] hover:[&>*]:text-gray-600 cursor-pointer mr-2"
                       onClick={() => {
                         navigator.clipboard.writeText(person.name);
                         setCopied(person.id);
-                        setTimeout(() => setCopied(null), 200); // hide after 1.5s
+                        setTimeout(() => setCopied(null), 1000); // hide after 1.5s
                       }}
                     >
                       <LuLink className="text-[#8b8b8b]" />
                     </div>
+                    <a
+                      href='https://dribbble.com/shots/17399694-Search-Results-Animation'
+                      target='blank'
+                      className='hidden group-hover:flex gap-2 items-center !text-[#8b8b8b] ml-auto text-[12px] hover:[&>*]:text-gray-600'>
+                      <VscLinkExternal size={15} className='font-bold' />
+                      <span className='text-xs'>New Tab</span>
+                    </a>
                   </div>
-                  <a
-                    href='https://dribbble.com/shots/17399694-Search-Results-Animation'
-                    target='blank'
-                    className='hidden group-hover:flex gap-2 items-center !text-[#8b8b8b] ml-auto text-[12px] hover:[&>*]:text-gray-600'>
-                    <VscLinkExternal size={15} className='font-bold' />
-                    <span className='text-xs'>New Tab</span>
-                  </a>
                 </div>
               </motion.div>
             );
@@ -197,16 +200,18 @@ export default function AnimateSearch() {
                 <h3 className="font-medium text-gray-900">{highlightText(file.name, searchQuery)}</h3>
                 <p className="text-sm text-gray-500">in {file.location} • {file.lastEdited}</p>
               </div>
-              <div className="flex items-center">
-                {/* {copied === person.id && (
-                      <span className="text-xs text-white bg-black px-2 py-1 mt-1 rounded-md relative -top-7 left-10">Copied</span>
-                    )} */}
+              <div className=" hidden group-hover:flex items-center">
+                {copied === file.id && (<div className='flex items-center gap-1 text-[12px] text-white bg-black px-2 py-1 mt-1 rounded-md relative -top-[29px] left-12'>
+                  <TiTick className='text-white' />
+                  <span >Copied</span>
+                </div>
+                )}
                 <div
                   className="hidden group-hover:block hover:border border-[#9f9f9f] hover:rounded-full p-1 hover:bg-[#d1d1d4] hover:[&>*]:text-gray-600 cursor-pointer"
                   onClick={() => {
                     navigator.clipboard.writeText(file.name);
                     setCopied(file.id);
-                    setTimeout(() => setCopied(null), 200); // hide after 1.5s
+                    setTimeout(() => setCopied(null), 1000); // hide after 1.5s
                   }}
                 >
                   <LuLink className="text-[#8b8b8b]" />
